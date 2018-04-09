@@ -2,19 +2,19 @@
   <div id="app">
     <div class="box">
     <div id="detail-top">
-        <div class="cardBox">
+        <div class="cardBox" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + bgimg + ')'}">
             <div class="logoBox">
                 <div class="img">
                     <img src="../../assets/img/logo@2x.png" alt="加载中...">   
                 </div>
                 <div class="logo-right">
                     <div>
-                        <span class="shopping-card">狂欢购物卡</span>
+                        <span class="shopping-card">{{baseMsg.typename}}</span>
                         <span class="limit">您的预估额度为</span>
                     </div>
                     <div>
-                        <span class="company">万达集团</span>
-                        <span class="money"><span class="dollar">¥</span>{{baseMsg.money}}</span>
+                        <span class="company">{{baseMsg.aidname}}</span>
+                        <span class="money"><span class="dollar">¥</span>{{baseMsg.predict  }}</span>
                     </div>
                 </div>
             </div>   
@@ -25,25 +25,31 @@
                     <img src="../../assets/img/jinru@2x.png" alt="进入">
                 </a>
             </div>
-            <img src="../../assets/img/ditu@2x.png" alt="cardlogo">
         </div>
       </div>
       <div id="detail-main">
+            <div>
+              <span>卡产品编号</span>
+              <span>{{baseMsg.number}}</span>
+            </div>
              <div>
               <span>发卡方</span>
-              <span>{{baseMsg.company}}</span>
+              <span>{{baseMsg.aidname}}</span>
             </div>
             <div>
                 <span>支付方式</span>
-                <span>{{baseMsg.payType}}</span>
+                <span v-if="baseMsg.maintype==0">通用信用支付卡</span>
+                <span v-if="baseMsg.maintype==1">信用支付专项卡</span>
+                <span v-if="baseMsg.maintype==2">分期支付专项卡</span>
             </div>
             <div>
                 <span>申请条件</span>
-                <span>{{baseMsg.apply}}</span>
+                <span>{{baseMsg.condition}}</span>
             </div>
             <div>
                 <span>有效期</span>
-                <span>{{baseMsg.indate}}</span>
+                <span v-if="indate==0">{{indateVal1}}次</span>
+                <span v-if="indate==1">{{indateVal2}}天</span>
             </div>
             <div>
                 <span>卡片应用场景</span>
@@ -51,11 +57,11 @@
             </div>
             <section class="wrop">
                 <p>应用范围</p>
-                <p>{{baseMsg.useRange}}</p>
+                <p>{{baseMsg.range}}</p>
             </section>
             <section class="wrop">
                 <p>卡片介绍</p>
-                <p>该卡是{{baseMsg.cardIntroduce}}公司旗下产品...</p>
+                <p>{{baseMsg.profiles}}</p>
             </section>
           
       </div>
@@ -67,11 +73,58 @@
 </template>
 
 <script>
+import axios from 'axios';
+import md5 from 'md5';
   export default {
     data () {
       return {
-        baseMsg: "",
+        baseMsg: {},
+        indate:1,
+        indateVal1:"",
+        indateVal2:"",
+        bgimg:""
       }
+    },
+    mounted(){
+      let obj = {
+        loginaid : "14280420180212162446",
+        apiId : "Api_CARD_MARKET_TYPE_A2_Request",
+        card_type_id : "13440320180202134238_2_174_1518076842433",
+        clog:"690x334"
+      }
+      function objKeySort(obj) {
+          var newkey = Object.keys(obj).sort();
+          var str = "";
+          for (var i = 0; i < newkey.length; i++) {
+              str += obj[newkey[i]];
+              
+          }
+          return str;
+      }
+      obj.sign = md5(objKeySort(obj));
+      let requestjson = JSON.stringify(obj);
+      let _this = this;
+      axios({
+        method: 'post',
+        url: '/ldo',
+        headers:{
+          'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        params:{
+          requestjson
+        }
+      })
+      .then(function (res) {
+        _this.baseMsg = res.data.pageList[0];
+        _this.indate = res.data.pageList[0].card_type_contract.cpLoseType;
+        _this.indateVal1 = res.data.pageList[0].card_type_contract.cp11Losemaxuse;
+        _this.indateVal2 = res.data.pageList[0].card_type_contract.cp10Loseexplen;
+        _this.bgimg = res.data.pageList[0].clog;
+        console.log(_this.bgimg)
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
     }
   }
 </script>
@@ -89,14 +142,15 @@ h1 {
   background: #F0F2F5;  
 }
 #detail-top {
-  margin: .2rem .3rem .3rem .3rem;
+  box-sizing: border-box;
+  padding: .2rem .3rem .3rem .3rem;
 }
 .cardBox {
   padding-top: .38rem;
-  border-radius: .28rem;
   box-sizing: border-box;
   position: relative;
-  background: linear-gradient(to right, #3995ff, #7bc5ff);
+  background: url(../../assets/img/card5@2x.png) no-repeat;
+  background-size: 100%;
 }
 .logoBox {
   text-align: left;
@@ -170,18 +224,11 @@ h1 {
   margin-left: .19rem;
   vertical-align: middle;
 }
-.cardBox > img {
-  width: 2.14rem;
-  height: 2.42rem;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  opacity: 0.2;
-}
 #detail-main {
   height: auto;
   padding: 0 .56rem;
   background: #fff;
+  margin-bottom: 1.18rem;
 }
 #detail-main div {
   height: .84rem;

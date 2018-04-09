@@ -7,23 +7,23 @@
         </div>
         <div>
             <span>会员费金额</span>
-            <span>{{param.memberFee}}元</span>
+            <span>{{param.cp13Memberfee}}元</span>
         </div>
         <div>
             <span>账单日</span>
-            <span>{{param.accountDate}}</span>
+            <span>每月{{param.c1Billcalstart}}日</span>
         </div>
         <div>
             <span>账单统计期</span>
-            <span>{{param.accountStatistics}}</span>
+            <span>{{param.c3Billcalleng}}个月</span>
         </div>
         <div>
             <span>到期还款日</span>
-            <span>{{param.dueDate}}</span>
+            <span>账单日后{{param.c4Billleng}}天</span>
         </div>
         <div>
             <span>最低单笔消费金额</span>
-            <span>{{param.lowestConsume}}</span>
+            <span>{{param.cp12Minpay}}元</span>
         </div>
         <div>
             <span>最低账单分期金额</span>
@@ -33,7 +33,7 @@
             <span>可分期期数及费率</span>
         </div>
         <div class="fq">
-            <span>8%/期（分3期）、6%/期（分6期）、5%/期（分9期）、4%/期（分12期）、3%/期（分18期）、1.8%/期（分24期）</span>
+            <span>{{type_periodList}}</span>
         </div>
     </div>
       <div class="btn">
@@ -44,11 +44,63 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  import md5 from 'md5';
   export default {
     data() {
       return {
-        param: ""
+        param: "",
+        type_periodList:[]
       };
+    },
+    methods:{
+      toPoint(percent){
+          let str=Number(percent*100);
+          str+="%";
+          return str;
+      }
+    },
+    mounted(){
+      let obj = {
+        loginaid : "14280420180212162446",
+        pictype : "big_pic",
+        apiId : "Api_CARD_MARKET_TYPE_A2_Request",
+        card_type_id : "13440320180202134238_2_174_1518076842433",
+        clog:"690x334"
+      }
+      function objKeySort(obj) {
+          var newkey = Object.keys(obj).sort();
+          var str = "";
+          for (var i = 0; i < newkey.length; i++) {
+              str += obj[newkey[i]];
+          }
+          return str;
+      }
+      obj.sign = md5(objKeySort(obj));
+      let requestjson = JSON.stringify(obj);
+      let _this = this;
+      axios({
+          method: 'post',
+          url: '/ldo',
+          headers:{
+          'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          params:{
+          requestjson
+          }
+      })
+      .then(function (res) {
+          _this.param = res.data.pageList[0].card_type_contract;
+          let str = '';
+          res.data.pageList[0].type_periodList.forEach(element => {
+            str += Number(element.rate*100) + '%/期(分'+ element.periodcount+'期)、'
+          });
+          _this.type_periodList = str.substring(0,str.length-1);
+
+      })
+      .catch(function (response) {
+          console.log(response);
+      });
     }
   }
 </script>

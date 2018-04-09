@@ -15,10 +15,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         pathRewrite: { '^/api': '' }
+      },
+      '/ldo': {
+        target: 'http://211.138.112.132:2704',
+        changeOrigin: true,
       }
     },
     open: true,
-    openPage: 'search.html'
+    openPage: 'store.html'
   }
 })
 
