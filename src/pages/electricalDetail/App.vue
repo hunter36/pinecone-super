@@ -4,7 +4,7 @@
 	  <div class="flower">
 		  <img src="../../assets/img/LOGO1.png" class="logo">
 		  <div class="flowerRight">
-			  <h3>花花公子</h3>
+			  <h3>{{ title }}</h3>
 			  <p>运营方名称：捷富集团</p>
 			  <p>备案登记号：23432453546</p>
 		  </div>
@@ -73,7 +73,7 @@
 
 <script>
 // export default {
-//   name:"ElectricalDatail",
+//   name:"electricalDatail",
 //   data(){
 //     return {
 //       title:"花花公子",
@@ -198,9 +198,12 @@
         float: left;
         font-size: .26rem;
     }
+	.float-left span{
+		width: 0.26rem;
+		margin-right: .12rem;
+	}
     .float-left img{
         width: .26rem;
-        padding-right: .12rem;
     }
     .float-right{
         float: right;

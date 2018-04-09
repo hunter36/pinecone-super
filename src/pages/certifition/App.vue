@@ -6,7 +6,7 @@
 				<input type="text" name="" placeholder="请选择">
 				<img src="../../assets/img/jinru.png" alt="" class="jinru">
 			</li>
-			<li class="name">
+			<li class="name" v-on:click="middleClick">
 				<p>联系人姓名</p>
 				<input type="text" name="" placeholder="请从通讯录中选择">
 				<div class="tongxunlu">
@@ -24,7 +24,7 @@
 				<input type="text" name="" placeholder="请选择">
 				<img src="../../assets/img/jinru.png" alt="" class="jinru">
 			</li>
-			<li class="name">
+			<li class="name" v-on:click="middleClick">
 				<p>联系人姓名</p>
 				<input type="text" name="" placeholder="请从通讯录中选择">
 				<div class="tongxunlu">
@@ -44,41 +44,60 @@
 		position="bottom">
 			<div class="popup">
 				<h3>选择与本人关系</h3>
-					<span v-on:click="closeClick">确定</span>
-				</div>
-				<div class="gx">
-					<p class="p1">父母</p>
-					<p class="p2">子女</p>
-					<p class="p3">配偶</p>
-					<p class="p2">亲戚</p>
-					<p class="p4">同事</p>
+				<span v-on:click="closeClick">确定</span>
+			</div>
+			<div class="gx">
+				<p class="p1">父母</p>
+				<p class="p2">子女</p>
+				<p class="p3">配偶</p>
+				<p class="p2">亲戚</p>
+				<p class="p4">同事</p>
+				<p class="p4">朋友</p>
+			</div>
+		</popup>
+		<popup
+		v-model="middleVisible"
+		position="middle" class="middle">
+			<p class="allow">是否允许“松果信用”读取通话记录</p>
+			<div class="dianji">
+				<a class="left" v-on:click="closemiddle">取消</a>
+				<a class="right" v-on:click="closemiddle">允许</a>
 			</div>
 		</popup>
 	</div>
 </template>
 
 <script>
+
 import { Popup } from 'mint-ui';
-import { MessageBox } from 'mint-ui';
+import axios from 'axios'
 export default {
+  name:"certifition",
   components:{
 	  Popup
   },
   data(){
 	  return{
-		  popupVisible:false
+		  popupVisible:false,
+		  middleVisible:false
 	  }
   },
   methods: {
     handleClick: function() {
-		console.log(1)
-        this.popupVisible = true
+		this.popupVisible = true
+		// console(document.querySelectorAll('.gx p').length) 
 	  },
 	closeClick: function() {
-		// return false;
-        this.popupVisible = false
-      }
-	}
+		this.popupVisible = false;
+	  },
+	middleClick: function() {
+		this.middleVisible = true
+		// console(document.querySelectorAll('.gx p').length) 
+	  },
+	closemiddle: function() {
+		this.middleVisible = false;
+	  },
+	},
  }
 </script>
 
@@ -97,7 +116,7 @@ export default {
 		background: #fff;
 		margin-top: 0.2rem;
 	}
-	li{
+	ul li{
 		height: 0;
 		height: 1.21rem;
 		border-bottom: 0.01rem solid #e6e6e6;
@@ -232,14 +251,50 @@ export default {
 		color:rgba(202,202,202,1);
 		line-height:0.3rem;
 		margin-bottom: 0.51rem;
+	}		
+	.middle{
+		width:5.92rem;
+		height:3.2rem; 
+		background:rgba(255,255,255,1);
+		border-radius: 0.26rem 
 	}
-	.zhezhao{
-		background:rgba(0,0,0,.3);
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		display: none;
+	.middle .allow{
+		height: 2rem;
+		width: 5.90rem;
+		font-size:0.3rem;
+		font-family:PingFangSC-Light;
+		color:rgba(51,51,51,1);
+		line-height:2rem;
+		text-align: center;
+		border-bottom: 0.01rem solid #CCCCCC;
+	}
+	.middle .dianji{
+		width: 5.9rem;
+		height: 1.2rem;
+		/* overflow: hidden; */
+	}
+	.middle .dianji .left{
+		display: block;
+		width: 2.95rem;
+		height: 1.2rem;
+		border: 0;
+		float: left;
+		background: #fff;
+		color: #333333;
+		border-radius: 0 0 0 0.26rem;
+		text-align: center
+	}
+	.middle .dianji .right{
+		display: block;
+		width: 2.94rem;
+		height: 1.2rem;
+		border: 0;
+		float: right;
+		background: #fff;
+		border-left: 0.01rem solid #CCCCCC;
+		border-radius: 0 0  0.26rem 0;
+		color: #F9AB2F;
+		text-align: center
 	}
 	.complete{
         width:6.9rem;
@@ -248,20 +303,11 @@ export default {
         border-radius: 0.08rem;
         margin: 0 auto; 
         margin-top: 0.6rem;
+
     }
-    /* .complete:link{
-        background: rgba(222,222,222,1);
-    } */
-    /* .complete:visited{
-        background: rgba(249,171,47,1);
-    } */
     .complete:hover{
         background: rgba(249,171,47,1);
     }
-    /* .complete:active{
-        background: rgba(249,171,47,1);
-    } */
-
     a{
         display: inline;
         display: block;

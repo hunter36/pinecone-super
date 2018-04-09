@@ -8,6 +8,7 @@
     "build": "webpack --mode production --progress --config build/webpack.prod.conf.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "mint-ui": "^2.2.13",
     "vue": "^2.5.16"
   },
