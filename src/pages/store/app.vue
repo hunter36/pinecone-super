@@ -93,10 +93,18 @@
             },
         },
         mounted(){
+            function getData(name) { 
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+                var r = "uid=14840220180408165327&shopaid=14230920180209140323".substr(1).match(reg); 
+                if (r != null) return unescape(r[2]); 
+                return null; 
+            } 
             let obj = {
-                loginaid : "14280420180212162446",
-                apiId : "Api_CM_BIND_CARDTYPES_A5_qryShop_support_cardtypes_with_AllNotBindCard_Request",
-                clog:"690x334"
+                loginaid:"13390520180202122715",
+                accid : "14840220180408165327",
+                apiId : "Api_CM_BIND_CARDTYPES_A5_qryShop_support_cardtypes_with_Userhad_Request",
+                shopaid : "14230920180209140323",
+                tocken:"20180202123045205-504da6af1e7a4f30885dbd8af627d5ac"
             }
             function objKeySort(obj) {
                 var newkey = Object.keys(obj).sort();

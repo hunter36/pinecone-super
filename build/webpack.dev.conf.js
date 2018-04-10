@@ -22,7 +22,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       }
     },
     open: true,
-    openPage: 'store.html'
+    openPage: 'card.html'
   }
 })
 

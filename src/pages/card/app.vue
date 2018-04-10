@@ -20,7 +20,7 @@
             </div>   
             <div class="line"></div>
             <div class="join">
-                <a href="">
+                <a href="javascript:;">
                     进入查看使用范围
                     <img src="../../assets/img/jinru@2x.png" alt="进入">
                 </a>
@@ -30,7 +30,7 @@
       <div id="detail-main">
             <div>
               <span>卡产品编号</span>
-              <span>{{baseMsg.number}}</span>
+              <span>{{baseMsg.cardTypeId}}</span>
             </div>
              <div>
               <span>发卡方</span>
@@ -65,9 +65,6 @@
             </section>
           
       </div>
-      <div class="btn">
-          立即申请
-      </div>
   </div>
   </div>
 </template>
@@ -75,6 +72,7 @@
 <script>
 import axios from 'axios';
 import md5 from 'md5';
+import url from "../../assets/js/common.js";
   export default {
     data () {
       return {
@@ -86,10 +84,17 @@ import md5 from 'md5';
       }
     },
     mounted(){
+      function getData(name) { 
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+        // var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
+        var r = window.location.search.substr(1).match(reg); 
+        if (r != null) return unescape(r[2]); 
+        return null; 
+      } 
       let obj = {
-        loginaid : "14280420180212162446",
+        loginaid : getData("uid"),
         apiId : "Api_CARD_MARKET_TYPE_A2_Request",
-        card_type_id : "13440320180202134238_2_174_1518076842433",
+        card_type_id : getData("cid"),
         clog:"690x334"
       }
       function objKeySort(obj) {
@@ -97,7 +102,6 @@ import md5 from 'md5';
           var str = "";
           for (var i = 0; i < newkey.length; i++) {
               str += obj[newkey[i]];
-              
           }
           return str;
       }
@@ -106,7 +110,7 @@ import md5 from 'md5';
       let _this = this;
       axios({
         method: 'post',
-        url: '/ldo',
+        url: url.url,
         headers:{
           'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
         },
@@ -120,7 +124,7 @@ import md5 from 'md5';
         _this.indateVal1 = res.data.pageList[0].card_type_contract.cp11Losemaxuse;
         _this.indateVal2 = res.data.pageList[0].card_type_contract.cp10Loseexplen;
         _this.bgimg = res.data.pageList[0].clog;
-        console.log(_this.bgimg)
+        console.log(11,_this.bgimg)
       })
       .catch(function (response) {
         console.log(response);
@@ -148,6 +152,7 @@ h1 {
 .cardBox {
   padding-top: .38rem;
   box-sizing: border-box;
+  border-radius:.28rem;
   position: relative;
   background: url(../../assets/img/card5@2x.png) no-repeat;
   background-size: 100%;
@@ -239,8 +244,14 @@ h1 {
 }
 #detail-main div > span:nth-last-child(1) {
   color: #333;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  text-align:right;
 }
 #detail-main div span {
+  display:inline-block;
+  width:50%;
   font-size: .26rem;
   color: #666666;
 }
@@ -256,16 +267,5 @@ h1 {
 }
 .wrop p:nth-child(2){
   color: #333;
-}
-.btn {
-  position: fixed;
-  bottom: 0;
-  color: #ffffff;
-  height: 1.18rem;
-  width: 100%;
-  font-size: .36rem;
-  text-align: center;
-  line-height: 1.18rem;
-  background: #ffb745;
 }
 </style>

@@ -36,9 +36,6 @@
             <span>{{type_periodList}}</span>
         </div>
     </div>
-      <div class="btn">
-          立即申请
-      </div>
   </div>
   </div>
 </template>
@@ -46,6 +43,8 @@
 <script>
   import axios from 'axios';
   import md5 from 'md5';
+  import url from "../../assets/js/common.js";
+  import ""
   export default {
     data() {
       return {
@@ -61,11 +60,17 @@
       }
     },
     mounted(){
+      function getData(name) { 
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+        // var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
+        var r = window.location.search.substr(1).match(reg); 
+        if (r != null) return unescape(r[2]); 
+        return null; 
+      } 
       let obj = {
-        loginaid : "14280420180212162446",
-        pictype : "big_pic",
+        loginaid : getData("uid"),
         apiId : "Api_CARD_MARKET_TYPE_A2_Request",
-        card_type_id : "13440320180202134238_2_174_1518076842433",
+        card_type_id : getData("cid"),
         clog:"690x334"
       }
       function objKeySort(obj) {
@@ -81,7 +86,7 @@
       let _this = this;
       axios({
           method: 'post',
-          url: '/ldo',
+          url: url.url,
           headers:{
           'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
           },
@@ -155,16 +160,5 @@ h1 {
   height: auto;
   line-height: .48rem;
   padding-bottom: .2rem;
-}
-.btn {
-  position: fixed;
-  bottom: 0;
-  color: #ffffff;
-  height: 1.18rem;
-  width: 100%;
-  font-size: 0.36rem;
-  text-align: center;
-  line-height: 1.18rem;
-  background: #ffb745;
 }
 </style>
