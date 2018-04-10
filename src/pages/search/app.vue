@@ -3,7 +3,7 @@
     <div class="box">
         <div class="card views">
           <div class="titleBar" v-show="cards">卡片</div>
-          <div class="cBody" v-for="(item, index) in cards">
+          <div class="cBody" v-for="(item, index) in cards" v-show="index < cardLimitNumber">
             <div class="cImg" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.facestyle + ')'}">
               <div class="cTop">
                 <dl>
@@ -35,7 +35,7 @@
           <div class="titleBar" v-show="store">门店</div>
           <div class="sBody">
             <ul>
-              <li v-for="(item, index) in store">
+              <li v-for="(item, index) in store" v-show="index < storeLimitNumber">
                 <div class="sImg" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.shopphotos + ')'}"></div>
                 <h1>{{item.shopname}}</h1>
                 <p>{{item.address}}<span>&lt;230m</span></p>
@@ -47,7 +47,7 @@
         </div>
         <div class="eshop views">
           <div class="titleBar">电商</div>
-          <div class="eBody" v-for="(item, index) in eshop">
+          <div class="eBody" v-for="(item, index) in eshop" v-show="index < eshopLimitNumber">
             <div class="eBanner" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.elog + ')'}"></div>
             <div class="eMessage">
               <div>
@@ -70,10 +70,16 @@
     data () {
       let cardFlag = false
       let cardTab = "查看更多"
+      let cardLength
+      let cardLimitNumber = 2
       let storeFlag = false
       let storeTab = "查看更多"
+      let storeLength
+      let storeLimitNumber = 2
       let eshopFlag = false
       let eshopTab = "查看更多"
+      let eshopLength
+      let eshopLimitNumber = 2
       let cards = []
       let store = []
       let eshop = []
@@ -81,10 +87,16 @@
       return {
         cardFlag, 
         cardTab,
+        cardLength,
+        cardLimitNumber,
         storeFlag,
         storeTab,
+        storeLength,
+        storeLimitNumber,
         eshopFlag,
         eshopTab,
+        eshopLength,
+        eshopLimitNumber,
         cards,
         store,
         eshop,
@@ -96,14 +108,18 @@
     },
     methods: {
         switchLoadCard: function(){
+            this.cardLimitNumber == 2 ? this.cardLimitNumber = this.cardLength : this.cardLimitNumber = 2;
             this.cardFlag = !this.cardFlag;
             this.cardFlag ? this.cardTab = "收起列表" : this.cardTab = "查看更多";
         },
         switchLoadStore: function(){
+            this.storeLimitNumber == 2 ? this.storeLimitNumber = this.storeLength : this.storeLimitNumber = 2;
+            console.log(this.storeLimitNumber);
             this.storeFlag = !this.storeFlag;
             this.storeFlag ? this.storeTab = "收起列表" : this.storeTab = "查看更多";
         },
         switchLoadEShop: function(){
+            this.eshopLimitNumber == 2 ? this.eshopLimitNumber = this.eshopLength : this.eshopLimitNumber = 2;
             this.eshopFlag = !this.eshopFlag;
             this.eshopFlag ? this.eshopTab = "收起列表" : this.eshopTab = "查看更多";
         },
@@ -124,8 +140,11 @@
                     // console.log(res.data.pageList[0].merchant_shops[0]);
                     // console.log(res.data.pageList[0].merchant_e_shops);
                     this.cards = res.data.pageList[0].market_typeList;
+                    this.cardLength = this.cards.length;
                     this.store = res.data.pageList[0].merchant_shops;
+                    this.storeLength = this.store.length;
                     this.eshop = res.data.pageList[0].merchant_e_shops;
+                    this.eshopLength = this.eshop.length;
                 })
                 .catch((err) => {
                     console.log(err);
