@@ -2,55 +2,29 @@
   <div id="app">
     <div class="box">
         <div class="card views">
-          <div class="titleBar">卡片</div>
-          <div class="cBody">
-            <div class="cImg">
+          <div class="titleBar" v-show="cards">卡片</div>
+          <div class="cBody" v-for="(item, index) in cards">
+            <div class="cImg" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.facestyle + ')'}">
               <div class="cTop">
                 <dl>
-                  <dt><div class="cLogo"></div></dt>
+                  <dt><div class="cLogo" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.clog + ')'}"></div></dt>
                   <dd>
-                    <h3>团圆佳节卡</h3>
-                    <p>院子餐厅</p>
+                    <h3>{{item.typename}}</h3>
+                    <p>{{item.card_merchant.companyname}}</p>
                   </dd>
                 </dl>
                 <div class="credit">
                   <p>您的预估额度为</p>
-                  <h2><b>￥</b>2300<span>.00</span></h2>
+                  <h2><b>￥</b>{{item.predict}}<span>.00</span></h2>
                 </div>
               </div>
               <div class="line"></div>
               <div class="cBottom">
                 <div class="cTips">
-                  <p><i><img src="../../assets/img/付.png"></i>支付方式<span>信用支付</span></p>
-                  <p><i><img src="../../assets/img/条件.png"></i>申请条件<span>信用支付</span></p>
-                  <p><i><img src="../../assets/img/地址.png"></i>适用范围<span>信用支付</span></p>
-                  <p><i><img src="../../assets/img/期限.png"></i>有效期限<span>信用支付</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cBody" v-show="cardFlag">
-            <div class="cImg">
-              <div class="cTop">
-                <dl>
-                  <dt><div class="cLogo"></div></dt>
-                  <dd>
-                    <h3>团圆佳节卡</h3>
-                    <p>院子餐厅</p>
-                  </dd>
-                </dl>
-                <div class="credit">
-                  <p>您的预估额度为</p>
-                  <h2><b>￥</b>2300<span>.00</span></h2>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="cBottom">
-                <div class="cTips">
-                  <p><i><img src="../../assets/img/付.png"></i>支付方式<span>信用支付</span></p>
-                  <p><i><img src="../../assets/img/条件.png"></i>申请条件<span>信用支付</span></p>
-                  <p><i><img src="../../assets/img/地址.png"></i>适用范围<span>信用支付</span></p>
-                  <p><i><img src="../../assets/img/期限.png"></i>有效期限<span>信用支付</span></p>
+                  <p><i><img src="../../assets/img/付.png"></i>支付方式<span>{{item.maintype == 0 ? "通用支付" : item.maintype == 1 ? "信用支付" : "分期支付"}}</span></p>
+                  <p><i><img src="../../assets/img/条件.png"></i>申请条件<span>{{item.condition}}</span></p>
+                  <p><i><img src="../../assets/img/地址.png"></i>适用范围<span>{{item.range}}</span></p>
+                  <p><i><img src="../../assets/img/期限.png"></i>有效期限<span>{{item.card_type_contract.cpLoseType == 0 ? item.card_type_contract.cp11Losemaxuse + "次": item.card_type_contract.cp10Loseexplen + "天"}}</span></p>
                 </div>
               </div>
             </div>
@@ -58,47 +32,27 @@
           <div class="button" @click="switchLoadCard">{{cardTab}}</div>
         </div>
         <div class="store views">
-          <div class="titleBar">门店</div>
+          <div class="titleBar" v-show="store">门店</div>
           <div class="sBody">
             <ul>
-              <li>
-                <div class="sImg"></div>
-                <h1>DIBA 东邦皮肤管理中心</h1>
-                <p>万象城店<span>&lt;230m</span></p>
+              <li v-for="(item, index) in store">
+                <div class="sImg" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.shopphotos + ')'}"></div>
+                <h1>{{item.shopname}}</h1>
+                <p>{{item.address}}<span>&lt;230m</span></p>
               </li>
-              <li>
-                <div class="sImg"></div>
-                <h1>DIBA 东邦皮肤管理中心</h1>
-                <p>万象城店<span>&lt;230m</span></p>
-              </li>
-              <li v-show="storeFlag">
-                <div class="sImg"></div>
-                <h1>DIBA 东邦皮肤管理中心</h1>
-                <p>万象城店<span>&lt;230m</span></p>
-              </li>
-              <li class="block" v-show="storeFlag"></li>
+              <li class="block"></li>
             </ul>
           </div>
           <div class="button" @click="switchLoadStore">{{storeTab}}</div>
         </div>
         <div class="eshop views">
           <div class="titleBar">电商</div>
-          <div class="eBody">
-            <div class="eBanner"></div>
+          <div class="eBody" v-for="(item, index) in eshop">
+            <div class="eBanner" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.elog + ')'}"></div>
             <div class="eMessage">
               <div>
-                <h3>花花公子男装商场</h3>
-                <p>与专柜同步，更优惠、优先收到 新鞋图册。</p>
-              </div>
-              <div class="toDetails">查看详情</div>
-            </div>
-          </div>
-          <div class="eBody" v-show="eshopFlag">
-            <div class="eBanner"></div>
-            <div class="eMessage">
-              <div>
-                <h3>花花公子男装商场</h3>
-                <p>与专柜同步，更优惠、优先收到 新鞋图册。</p>
+                <h3>{{item.shopname}}</h3>
+                <p>{{item.shopcomm}}</p>
               </div>
               <div class="toDetails">查看详情</div>
             </div>
@@ -110,6 +64,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  import Md5 from 'md5';
   export default {
     data () {
       let cardFlag = false
@@ -118,6 +74,9 @@
       let storeTab = "查看更多"
       let eshopFlag = false
       let eshopTab = "查看更多"
+      let cards = []
+      let store = []
+      let eshop = []
       let orders_status
       return {
         cardFlag, 
@@ -126,8 +85,14 @@
         storeTab,
         eshopFlag,
         eshopTab,
+        cards,
+        store,
+        eshop,
         orders_status
       }
+    },
+    mounted(){
+      this.getData("二月九日");
     },
     methods: {
         switchLoadCard: function(){
@@ -141,6 +106,42 @@
         switchLoadEShop: function(){
             this.eshopFlag = !this.eshopFlag;
             this.eshopFlag ? this.eshopTab = "收起列表" : this.eshopTab = "查看更多";
+        },
+        sendAjax : function(req){
+            axios({
+                method: 'post',
+                url: '/ldo',
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                params: {
+                    'requestjson': req
+                }
+            })
+                .then((res) => {
+                    console.log(res);
+                    // console.log(res.data.pageList[0].market_typeList);
+                    // console.log(res.data.pageList[0].merchant_shops[0]);
+                    // console.log(res.data.pageList[0].merchant_e_shops);
+                    this.cards = res.data.pageList[0].market_typeList;
+                    this.store = res.data.pageList[0].merchant_shops;
+                    this.eshop = res.data.pageList[0].merchant_e_shops;
+                })
+                .catch((err) => {
+                    console.log(err);
+                }
+            );
+        },
+        getData : function(keyword){
+            let str = "Api_APP_CardTypeMerchantShop_Search_A5_Request" + "64x64" + keyword;
+            let signValue = Md5(str);
+            let baseObj = {
+                "apiId" : "Api_APP_CardTypeMerchantShop_Search_A5_Request",
+                "clog" : "64x64",
+                "keyWord" : keyword
+            };
+            let req = JSON.stringify(baseObj);
+            this.sendAjax(req);
         }
     }
   }
@@ -193,7 +194,6 @@
   .cImg{
     height: 2.74rem;
     box-sizing: border-box;
-    background: url(../../assets/img/card3.png) no-repeat center center;
     background-size: 100%;
     padding: 0 0.28rem; 
     margin: .4rem 0;
@@ -263,14 +263,21 @@
   }
   .cTips p{
     display: block;
+    box-sizing: border-box;
+    padding-left: .32rem;
+    position: relative;
     width: 50%;
     overflow: hidden;
+    margin-top: .08rem;
   }
   .cTips p i{
     display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -0.11rem;
     width: .22rem;
     height: .22rem;
-    margin-right: .1rem;
   }
   .cTips p i img{
     width: 100%;
@@ -283,11 +290,17 @@
     height: 1px;
     background: rgba(255,255,255,0.35);
   }
+  .cTop dl dt{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   .cLogo{
     width: .75rem;
     height: .75rem;
-    background: url(../../assets/img/卡1图.png) no-repeat center center;
     background-size: 100%; 
+    border-radius: 50%;
   }
   .eshop{
     margin-bottom: .6rem;
@@ -332,7 +345,6 @@
     width: 3.4rem;
     height: 2.26rem;
     margin: 0 auto .3rem;
-    background: url(../../assets/img/门店1图.png) no-repeat center center;
     background-size: 100%;
   }
   .sBody ul li h1{
@@ -353,7 +365,6 @@
   .eBanner{
     width: 100%;
     height: 2.53rem;
-    background: url(../../assets/img/电商1图.png) no-repeat center center;
     background-size: 100%;
   }
   .eMessage{
@@ -366,6 +377,7 @@
   .eMessage h3{
     font-size: .28rem;
     color: #333;
+    margin-bottom: .2rem;
   }
   .eMessage p{
     font-size: .22rem;
