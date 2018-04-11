@@ -85,7 +85,7 @@
       let _this = this;
       axios({
           method: 'post',
-          url: url.url,
+          url: '/ldo',
           headers:{
           'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
           },
