@@ -3,7 +3,7 @@
     <div class="box">
         <div class="card views">
           <div class="titleBar" v-show="cards">卡片</div>
-          <div class="cBody" v-for="(item, index) in cards" v-show="index < cardLimitNumber">
+          <div class="cBody" v-for="(item, index) in cards" v-if="index < cardLimitNumber">
             <div class="cImg" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.facestyle + ')'}">
               <div class="cTop">
                 <dl>
@@ -35,7 +35,7 @@
           <div class="titleBar" v-show="store">门店</div>
           <div class="sBody">
             <ul>
-              <li v-for="(item, index) in store" v-show="index < storeLimitNumber">
+              <li v-for="(item, index) in store" v-if="index < storeLimitNumber">
                 <div class="sImg" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.shopphotos + ')'}"></div>
                 <h1>{{item.shopname}}</h1>
                 <p>{{item.address}}<span>&lt;230m</span></p>
@@ -47,7 +47,7 @@
         </div>
         <div class="eshop views">
           <div class="titleBar">电商</div>
-          <div class="eBody" v-for="(item, index) in eshop" v-show="index < eshopLimitNumber">
+          <div class="eBody" v-for="(item, index) in eshop" v-if="index < eshopLimitNumber">
             <div class="eBanner" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + item.elog + ')'}"></div>
             <div class="eMessage">
               <div>
@@ -100,11 +100,11 @@
         cards,
         store,
         eshop,
-        orders_status
+        orders_status,
       }
     },
-    mounted(){
-      this.getData("二月九日");
+    created(){
+        window.getData = this.getData
     },
     methods: {
         switchLoadCard: function(){
@@ -136,9 +136,6 @@
             })
                 .then((res) => {
                     console.log(res);
-                    // console.log(res.data.pageList[0].market_typeList);
-                    // console.log(res.data.pageList[0].merchant_shops[0]);
-                    // console.log(res.data.pageList[0].merchant_e_shops);
                     this.cards = res.data.pageList[0].market_typeList;
                     this.cardLength = this.cards.length;
                     this.store = res.data.pageList[0].merchant_shops;
@@ -152,6 +149,7 @@
             );
         },
         getData : function(keyword){
+            console.log(keyword);
             let str = "Api_APP_CardTypeMerchantShop_Search_A5_Request" + "64x64" + keyword;
             let signValue = Md5(str);
             let baseObj = {
@@ -161,6 +159,9 @@
             };
             let req = JSON.stringify(baseObj);
             this.sendAjax(req);
+        },
+        jsCallJava(message){
+            window.AndroidWebView.getData(message);
         }
     }
   }
