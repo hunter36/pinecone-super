@@ -27,7 +27,7 @@
         </div>
         <div>
             <span>最低账单分期金额</span>
-            <span>{{param.lowestAging}}</span>
+            <span>{{param.cp12Minpay}}元</span>
         </div>
         <div id="lv">
             <span>可分期期数及费率</span>
@@ -43,8 +43,7 @@
 <script>
   import axios from 'axios';
   import md5 from 'md5';
-  import url from "../../assets/js/common.js";
-  import ""
+  import url from "../../assets/js/public.js";
   export default {
     data() {
       return {
@@ -62,8 +61,8 @@
     mounted(){
       function getData(name) { 
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-        // var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
-        var r = window.location.search.substr(1).match(reg); 
+        var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
+        // var r = window.location.search.substr(1).match(reg); 
         if (r != null) return unescape(r[2]); 
         return null; 
       } 

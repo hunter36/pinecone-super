@@ -2,66 +2,69 @@
     <div>
         <swipe :auto="4000" class="swipeBox">
             <span class="return" @click="goback"></span>
-            <swipe-item v-for="img in imgList" :key="img.id"><img :src="img.src"></swipe-item>
+            <swipe-item v-for="(index,img) in imgList" :key="img.id"><img :src="img.src"></swipe-item>
         </swipe>
         <div class="contact">
             <div class="contact-left">
-                <div>中国移动星光大道店</div>
-                <div><span><img class="address" src="../../assets/img/dingwei@2x.png" alt="address"></span>浙江省杭州市滨江区春晓路23号</div>
+                <div>{{data.shopname}}</div>
+                <div><span><img class="address" src="../../assets/img/dingwei@2x.png" alt="address"></span>{{data.address}}</div>
             </div>
             <div class="contact-right"><span class="tel"><img src="../../assets/img/tel.png" alt="tel"></span>&nbsp;联系商家</div>
         </div>
         <div class="titleBar">门店可用虚拟卡</div>
-        <div class="possess">
-            <div class="possess-title">
-                <div class="float-left"><span><img src="../../assets/img/success@2x.png" alt="已拥有"></span>已拥有的卡片</div>
-                <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
+        <div v-if="open">
+            <div class="possess">
+                <div class="possess-title">
+                    <div class="float-left"><span><img src="../../assets/img/success@2x.png" alt="已拥有"></span>已拥有的卡片</div>
+                    <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
+                </div>
+                <div class="card" v-for="(item,index) in card1" :key="index" v-show="index < notCardLength">
+                    <dl>
+                        <dt><div class="cLogo" :style="{background:'url(http://211.138.112.132:2704/serverimages/' +item.card_market_type.clog+')'}"></div></dt>
+                        <dd>
+                            <h3 v-if="item.card_market_type.maintype==0">通用信用支付卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==1">信用支付专项卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==2">分期支付专项卡</h3>
+                            <p>{{item.card_market_type.aidname}}</p>
+                        </dd>
+                    </dl>
+                    <div class="credit"></div>
+                </div>
             </div>
-            <div class="card">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
-            </div>
-            <div class="card card2">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
+            <div class="possess">
+                <div class="possess-title">
+                    <div class="float-left"><span><img src="../../assets/img/kapian@2x.png" alt="未拥有"></span>未拥有的卡片</div>
+                    <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
+                </div>
+                <div class="card" v-for="(item,index) in card2" :key="index" v-show="index < notCardLength">
+                    <dl>
+                        <dt><div class="cLogo" :style="{background:'url(http://211.138.112.132:2704/serverimages/' +item.card_market_type.clog+')'}"></div></dt>
+                        <dd>
+                            <h3 v-if="item.card_market_type.maintype==0">通用信用支付卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==1">信用支付专项卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==2">分期支付专项卡</h3>
+                            <p>{{item.card_market_type.aidname}}</p>
+                        </dd>
+                    </dl>
+                    <div class="credit"></div>
+                </div>
             </div>
         </div>
-        <div class="possess">
-            <div class="possess-title">
-                <div class="float-left"><span><img src="../../assets/img/kapian@2x.png" alt="未拥有"></span>未拥有的卡片</div>
-                <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
-            </div>
-            <div class="card">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
-            </div>
-            <div class="card card2">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
+        <div v-if="!open">
+            <div class="possess nouser">
+                <div class="card" v-for="(item,index) in card2" :key="index" v-show="index < cardLimitNumber">
+                    <dl>
+                        <dt><div class="cLogo" :style="{background:'url(http://211.138.112.132:2704/serverimages/' +item.card_market_type.clog+')'}"></div></dt>
+                        <dd>
+                            <h3 v-if="item.card_market_type.maintype==0">通用信用支付卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==1">信用支付专项卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==2">分期支付专项卡</h3>
+                            <p>{{item.card_market_type.aidname}}</p>
+                        </dd>
+                    </dl>
+                    <div class="credit"></div>
+                </div>
+                <div class="button" @click="switchLoadECard">{{cardTab}}</div>
             </div>
         </div>
     </div>
@@ -72,6 +75,7 @@
     import { Swipe, SwipeItem } from 'mint-ui';
     import axios from 'axios';
     import md5 from 'md5';
+    import url from "../../assets/js/public.js";  
     export default {
         name:'store',
         components:{
@@ -80,60 +84,128 @@
         },
         data(){
             return {
+                open : true,
+                cardFlag : false,
+                notCardLength:'',
+                cardTab : "查看更多",
+                cardLength : '',
+                cardLimitNumber : 2,
                 imgList:[
-                    {id:1,src:require("../../assets/img/门店1图@2x.png")},
-                    {id:2,src:require("../../assets/img/门店3图@2x.png")},
-                    {id:3,src:require("../../assets/img/门店4图@2x.png")}
-                ],
+                    // {id:1,src:require("../../assets/img/门店1图@2x.png")}
+                    ],
+                data:'',
+                card1:[],
+                card2:[]
             }
         },
         methods: {
             goback(){
                 window.history.go(-1)
             },
-        },
-        mounted(){
-            function getData(name) { 
+            urlParam(name) { 
                 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-                var r = "uid=14840220180408165327&shopaid=14230920180209140323".substr(1).match(reg); 
+                var r = window.location.search.substr(1).match(reg); 
+                var r = "?uid=14260720180209165930&aid=14260720180209165930&shopaid=14230920180209140323&tocken=20180202123045205-504da6af1e7a4f30885dbd8af627d5ac".substr(1).match(reg); 
                 if (r != null) return unescape(r[2]); 
                 return null; 
-            } 
-            let obj = {
-                loginaid:"13390520180202122715",
-                accid : "14840220180408165327",
-                apiId : "Api_CM_BIND_CARDTYPES_A5_qryShop_support_cardtypes_with_Userhad_Request",
-                shopaid : "14230920180209140323",
-                tocken:"20180202123045205-504da6af1e7a4f30885dbd8af627d5ac"
-            }
-            function objKeySort(obj) {
-                var newkey = Object.keys(obj).sort();
-                var str = "";
+            },
+            getData(loginaid,aid,tocken){
+                let obj = {
+                    aid,   //门店编号
+                    loginaid,
+                    tocken,
+                    apiId : "Api_MERCHANT_SHOP_A2_Request"
+                }
+                let newkey = Object.keys(obj).sort();
+                let str = "";
                 for (var i = 0; i < newkey.length; i++) {
                     str += obj[newkey[i]];
                 }
-                return str;
-            }
-            obj.sign = md5(objKeySort(obj));
-            let requestjson = JSON.stringify(obj);
-            let _this = this;
-            axios({
-                method: 'post',
-                url: '/ldo',
-                headers:{
-                'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
-                },
-                params:{
-                    requestjson
+                obj.sign = md5(str);
+                let requestjson = JSON.stringify(obj);
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: url.url,
+                    headers:{
+                    'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    params:{
+                        requestjson
+                    }
+                })
+                .then(function (res) {
+                    _this.data = res.data.pageList[0];
+                    let obj = {};
+                    obj.src = 'http://211.138.112.132:2704/serverimages/'+res.data.pageList[0].shopphotos;
+                    _this.imgList.push(obj);
+                    console.log(_this.imgList)
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+            },
+            getCardMsg(shopaid,loginaid,isBind,tocken){
+                let obj = {
+                    loginaid,
+                    shopaid,
+                    isBind,
+                    tocken,
+                    apiId : "Api_CM_BIND_CARDTYPES_A5_qryShopBindCardsAndNotBindCards_Request"
                 }
-            })
-            .then(function (res) {
-                _this.baseMsg = res.data.pageList[0];
-                console.log(_this.baseMsg)
-            })
-            .catch(function (response) {
-                console.log(response);
-            });
+                let newkey = Object.keys(obj).sort();
+                let str = "";
+                for (var i = 0; i < newkey.length; i++) {
+                    str += obj[newkey[i]];
+                }
+                obj.sign = md5(str);
+                let requestjson = JSON.stringify(obj);
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: url.url,
+                    headers:{
+                    'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    params:{
+                        requestjson
+                    }
+                })
+                .then(function (res) {
+                    if(isBind==0){
+                        _this.card1 = res.data.pageList;
+                        console.log(_this.card1)
+                    }else{
+                        _this.card2 = res.data.pageList;   
+                        _this.notCardLength = _this.card2.length;
+                        console.log(_this.card2)
+                                             
+                    }
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+            },
+            switchLoadECard(){
+                this.cardLimitNumber == 2 ? this.cardLimitNumber = this.notCardLength : this.cardLimitNumber = 2;
+                this.cardFlag = !this.cardFlag;
+                this.cardFlag ? this.cardTab = "收起列表" : this.cardTab = "查看更多";
+            },
+
+        },
+        mounted(){
+            let aid = this.urlParam('aid');
+            let loginaid = this.urlParam('uid');
+            let shopaid = this.urlParam('shopaid');
+            let tocken = this.urlParam('tocken');
+            this.getData(loginaid,aid,tocken);
+            if(loginaid){
+                this.getCardMsg(loginaid,shopaid,'0');
+                this.getCardMsg(loginaid,shopaid,'1');
+            }else{
+                this.open = false;
+                this.getCardMsg(shopaid);                
+            }
         }
     }
 </script>
@@ -167,7 +239,7 @@
     }
     .contact-left{
         float: left;
-        width: 4.91rem;
+        width: 68%;
         box-sizing: border-box;
         margin: .3rem;
         border-right: 1px solid rgb(241, 241, 241);
@@ -203,6 +275,7 @@
     color: #666666;
     line-height: .8rem;
     text-align: center;
+    border-top: .1rem solid #ECECEC;
     border-bottom: 1px solid #ECECEC;
     background: url(../../assets/img/标头线1@2x.png) no-repeat center center;
         background-size: 100%; 
@@ -245,9 +318,6 @@
     display: flex;
     justify-content: space-between;
     }
-    .card2{
-        background:linear-gradient(to right, #FF8D20, #FFBB15);
-    }
     .card dl{
         font-size: 0;
     display: flex;
@@ -257,6 +327,7 @@
     font-size: .26rem;
     display: flex;
     flex-direction: column;
+    padding: .2rem 0;
     justify-content: space-around;
     color: #fefefe;
   }
@@ -287,4 +358,16 @@
         background: url(../../assets/img/ditu@2x.png) no-repeat;
         background-size: 100%;
     }
+    .nouser{
+        margin-top: .31rem;
+    }
+    .button{
+    width: 100%;
+    height: .7rem;
+    font-size: .24rem;
+    color: #F9A724;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

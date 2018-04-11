@@ -38,9 +38,9 @@
             </div>
             <div>
                 <span>支付方式</span>
-                <span v-if="baseMsg.maintype==0">通用信用支付卡</span>
-                <span v-if="baseMsg.maintype==1">信用支付专项卡</span>
-                <span v-if="baseMsg.maintype==2">分期支付专项卡</span>
+                <span v-show="baseMsg.maintype==0">通用信用支付卡</span>
+                <span v-show="baseMsg.maintype==1">信用支付专项卡</span>
+                <span v-show="baseMsg.maintype==2">分期支付专项卡</span>
             </div>
             <div>
                 <span>申请条件</span>
@@ -48,8 +48,8 @@
             </div>
             <div>
                 <span>有效期</span>
-                <span v-if="indate==0">{{indateVal1}}次</span>
-                <span v-if="indate==1">{{indateVal2}}天</span>
+                <span v-show="indate==0">{{indateVal1}}次</span>
+                <span v-show="indate==1">{{indateVal2}}天</span>
             </div>
             <div>
                 <span>卡片应用场景</span>
@@ -72,7 +72,7 @@
 <script>
 import axios from 'axios';
 import md5 from 'md5';
-import url from "../../assets/js/common.js";
+import url from "../../assets/js/public.js";
   export default {
     data () {
       return {
@@ -86,8 +86,8 @@ import url from "../../assets/js/common.js";
     mounted(){
       function getData(name) { 
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-        // var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
-        var r = window.location.search.substr(1).match(reg); 
+        var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
+        // var r = window.location.search.substr(1).match(reg); 
         if (r != null) return unescape(r[2]); 
         return null; 
       } 
