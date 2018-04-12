@@ -66,7 +66,6 @@
 <script>
   import axios from 'axios';
   import Md5 from 'md5';
-  import url from "../../assets/js/public.js";  
   export default {
     data () {
       let cardFlag = false
@@ -127,7 +126,7 @@
         sendAjax : function(req){
             axios({
                 method: 'post',
-                url: url.url,
+                url: '/ldo',
                 headers: {
                     'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
                 },

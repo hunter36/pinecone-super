@@ -73,7 +73,6 @@
 <script>
 import axios from 'axios';
 import md5 from 'md5';
-// import url from "../../assets/js/public.js";
   export default {
     data () {
       return {
@@ -88,7 +87,6 @@ import md5 from 'md5';
     methods:{
       getUrlParam(name) { 
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-        var r = "?uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
         var r = window.location.search.substr(1).match(reg); 
         if (r != null) return unescape(r[2]); 
         return null; 
@@ -99,6 +97,7 @@ import md5 from 'md5';
           card_type_id : cid,
           details:'1',
           clog:"690x334",
+          style:"0",
           apiId : "Api_CARD_MARKET_TYPE_A2_Request"
         }
         var newkey = Object.keys(obj).sort();
@@ -134,7 +133,7 @@ import md5 from 'md5';
       }
     },
     mounted(){
-      let loginaid = this.getUrlParam("uid");
+      let loginaid = this.getUrlParam("loginaid");
       let cid = this.getUrlParam("cid");
       this.getData(cid,loginaid)
     }
