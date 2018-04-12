@@ -151,7 +151,8 @@
                     shopaid,
                     isBind,
                     tocken,
-                    apiId : "Api_CM_BIND_CARDTYPES_A5_qryShopBindCardsAndNotBindCards_Request"
+                    apiId : "Api_CM_BIND_CARDTYPES_A5_qryShopBindCardsAndNotBindCards_Request",
+                    // apiId : 'Api_MERCHANT_SHOP_A5_qrCards_Matched_AllNotBindShop_Request'
                 }
                 let newkey = Object.keys(obj).sort();
                 let str = "";
@@ -175,6 +176,7 @@
                     if(isBind==0){
                         _this.card1 = res.data.pageList;
                         console.log(_this.card1)
+                        console.log(res.data)
                     }else{
                         _this.card2 = res.data.pageList;   
                         _this.notCardLength = _this.card2.length;

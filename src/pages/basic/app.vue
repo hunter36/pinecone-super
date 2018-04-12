@@ -1,60 +1,56 @@
 <template>
 	<div class="certifition">
 		<ul>
-			<li class="guanxi" v-on:click="handleClick">
+			<li class="guanxi">
 				<p>与本人关系</p>
-				<input type="text" name="" placeholder="请选择">
-				<img src="../../assets/img/jinru.png" alt="" class="jinru">
+				<input type="text" name="mcontact1type" placeholder="请选择">
+				<a href="#" class="jinru" v-on:click="handleClick"></a>
 			</li>
-			<li class="name" v-on:click="middleClick">
+			<li class="name">
 				<p>联系人姓名</p>
-				<input type="text" name="" placeholder="请从通讯录中选择">
-				<div class="tongxunlu">
-					<img src="../../assets/img/lianxiren.png" alt="" class="lianxiren">
+				<input type="text" name="emcontact1" placeholder="请从通讯录中选择">
+				<div class="tongxunlu lianxiren"  v-on:click="middleClick">
 				</div>
 			</li>
 			<li class="way">
 				<p>联系方式</p>
-				<input type="text" name="" placeholder="请从通讯录中选择">
+				<input type="text" name="emcontact1phone" placeholder="请从通讯录中选择">
 			</li>
 		</ul>
 		<ul>
-			<li class="guanxi" v-on:click="handleClick">
+			<li class="guanxi">
 				<p>与本人关系</p>
-				<input type="text" name="" placeholder="请选择">
-				<img src="../../assets/img/jinru.png" alt="" class="jinru">
+				<input type="text" name="emcontact2type" placeholder="请选择">
+				<a href="#" class="jinru" v-on:click="handleClick"></a>
 			</li>
-			<li class="name" v-on:click="middleClick">
+			<li class="name">
 				<p>联系人姓名</p>
 				<input type="text" name="" placeholder="请从通讯录中选择">
-				<div class="tongxunlu">
-					<img src="../../assets/img/lianxiren.png" alt="" class="lianxiren">
+				<div class="tongxunlu lianxiren"  v-on:click="middleClick">
 				</div>
 			</li>
 			<li class="way">
 				<p>联系方式</p>
-				<input type="text" name="" placeholder="请从通讯录中选择">
+				<input type="text" name="emcontact2phone" placeholder="请从通讯录中选择">
 			</li>
 		</ul>
 		<div class="complete">
 			<a href="#">完成</a>
 		</div>
-		<popup
+		<mt-popup
 		v-model="popupVisible"
 		position="bottom">
 			<div class="popup">
-				<h3>选择与本人关系</h3>
-				<span v-on:click="closeClick">确定</span>
-			</div>
+                <h3>选择与本人关系</h3>
+                <span v-on:click="closeClick">确定</span>
+            </div>
 			<div class="gx">
-				<p class="p1">父母</p>
-				<p class="p2">子女</p>
-				<p class="p3">配偶</p>
-				<p class="p2">亲戚</p>
-				<p class="p4">同事</p>
-				<p class="p4">朋友</p>
-			</div>
-		</popup>
+				<mt-picker :slots="slots" @change="onValuesChange">
+					
+				</mt-picker>
+            </div>
+
+		</mt-popup>
 		<popup
 		v-model="middleVisible"
 		position="middle" class="middle">
@@ -70,35 +66,91 @@
 <script>
 
 import { Popup } from 'mint-ui';
+import { Picker } from 'mint-ui';
 import axios from 'axios'
+// import md5 from 'md5'
 export default {
-  name:"certifition",
-  components:{
-	  Popup
-  },
-  data(){
-	  return{
-		  popupVisible:false,
-		  middleVisible:false
-	  }
-  },
-  methods: {
-    handleClick: function() {
-		this.popupVisible = true
-		// console(document.querySelectorAll('.gx p').length) 
-	  },
-	closeClick: function() {
-		this.popupVisible = false;
-	  },
-	middleClick: function() {
-		this.middleVisible = true
-		// console(document.querySelectorAll('.gx p').length) 
-	  },
-	closemiddle: function() {
-		this.middleVisible = false;
-	  },
+	name:"certifition",
+	components:{
+		Popup,
+		Picker,
 	},
- }
+	data(){
+		return{
+			popupVisible:false,
+			middleVisible:false,
+			slots: [
+				{
+				flex: 1,
+				values: ['父母', '子女', '配偶', '亲戚', '同事', '朋友'],
+				className: 'slot1',
+				textAlign: 'center'
+				},
+			],
+			// mcontact1,
+		}
+	},
+	// mounted(){
+    //   this.getData();
+    // },
+	methods: {
+		setvalue:function(name){
+
+		},
+		onValuesChange(picker, values) {
+			if (values[0] > values[1]) {
+				picker.setSlotValue(1, values[2]);
+			}
+		},
+		handleClick: function() {
+			this.popupVisible = true 
+		},
+		closeClick: function() {
+			this.popupVisible = false
+			console.log(document.querySelectorAll('.picker-item')[2].innerHTML)
+		},
+		middleClick: function() {
+			this.middleVisible = true
+		},
+		closemiddle: function() {
+			this.middleVisible = false
+		},
+		// getData : function(){
+		// 		let str = "Api_CUSER_A3_Request" ;
+		// 		// let signValue = Md5(str);
+		// 		let obj = {
+		// 			loginaid : "14280420180212162446",
+		// 			tocken : "20180213003304592-753573e5b7114635af4ccdef16b3b36d",
+		// 			pictype : "big_pic",
+		// 			sign : "dcaab9e9818a58087b8b7ea23f554ccb",
+		// 			apiId : "Api_CUSER_A3_Request",
+		// 			aid : "14280420180212162446",
+		// 		};
+		// 		let req = JSON.stringify(obj);
+		// 		this.sendAjax(req);
+		// },
+		// sendAjax : function(req){
+		// 		axios({
+		// 			method: 'post',
+		// 			url: '/ldo',
+		// 			headers: {
+		// 				'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+		// 			},
+		// 			params: {
+		// 				'requestjson': req
+		// 			}
+		// 		})
+		// 			.then((res) => {
+		// 				console.log(res);
+		// 				// console.log(res.data.status)
+		// 			})
+		// 			.catch((err) => {
+		// 				console.log(err);
+		// 			}
+		// 		);
+		// 	},
+	},
+}
 </script>
 
 
@@ -109,7 +161,6 @@ export default {
 	}
 	.certifition{
 		width: 100%;
-		padding-top: 1.28rem;
 		background: #F0F2F5;
 	}
 	ul{
@@ -129,6 +180,14 @@ export default {
 	.guanxi span{
 		border-right: 0;
 	}
+	.jinru{
+		width: 0.15rem;
+		height: 0.29rem;
+		margin: 0.47rem 0 0 0.69rem;
+		cursor: pointer;
+		background: url(../../assets/img/jinru.png) no-repeat ;
+		float: right;
+	}
 	.name{
 		padding-right: 0.35rem;
 	}
@@ -137,7 +196,8 @@ export default {
 	}
 	p{
 		height: 1.21rem;
-		font: 0.3rem/1.21rem "";
+		font-size: 0.3rem;
+		line-height: 1.21rem;
 		color: rgba(51,51,51,1);
 		margin: 0 0.6rem 0 0;
 		width: 1.5rem;
@@ -149,17 +209,19 @@ export default {
 		border-left: 0.01rem solid #e6e6e6;
 		float: right;
 		margin-top: 0.33rem;
+		background: url(../../assets/img/lianxiren.png) no-repeat center right;
 	}
 	input{
 		display: inline-block;
 		height: 0.6rem;
 		font-size:0.3rem;
-		color:rgba(196,196,196,1);
+		color:#333333;
 		line-height:0.6rem;
 		margin-top: 0.33rem;
 		float: left;
 		border: 0;
 		padding-left: 5px;
+		outline: none;
 	}
 	.lianxiren{
 		height: 0.43rem;
@@ -167,13 +229,7 @@ export default {
 		float: right;
 		margin-top: 0.06rem;
 	}
-	.jinru{
-		width: 0.15rem;
-		height: 0.29rem;
-		margin: 0.47rem 0 0 0.69rem;
-		cursor: pointer;
-		float: right;
-	}
+	
 	li:nth-child(3){
 		border-bottom: 0;
 	}
@@ -212,8 +268,10 @@ export default {
 		right: -6.32rem;
 	}
 	.mint-popup .gx{
-		height: 5.3rem;
+		height: 3.72rem;
 		padding: 0;
+		margin-top: 0.78rem;
+		overflow: hidden;
 	}
 	.mint-popup .gx p{
 		width: 100%;
@@ -226,7 +284,6 @@ export default {
 		color:rgba(202,202,202,1);
 		line-height:0.3rem;
 		margin-bottom: 0.51rem;
-		margin-top: 0.7rem
 	}
 	.p2{
 		height:0.32rem; 
@@ -245,11 +302,11 @@ export default {
 		margin-bottom: 0.54rem;
 	}
 	.p4{
-		height:0.3rem; 
+		height:0.28rem; 
 		font-size:0.28rem;
 		font-family:PingFangSC-Light;
 		color:rgba(202,202,202,1);
-		line-height:0.3rem;
+		line-height:0.28rem;
 		margin-bottom: 0.51rem;
 	}		
 	.middle{
@@ -318,4 +375,24 @@ export default {
         color:rgba(255,255,255,1);
         line-height:0.9rem;
     }
+	.picker{
+		padding-top: 0.7rem;
+		height:4.6rem;
+		width: 100%;
+		background: #fff;
+		display: block;
+		position: fixed;
+		bottom: 0
+	}
+	.picker-slot-wrapper{
+		position: relative;
+		top: -0.72rem;
+	}
+	.picker-selected{
+		height:0.34rem; 
+		font-size:0.36rem;
+		font-family:PingFangSC-Regular;
+		color:rgba(249,171,47,1);
+		line-height:0.3rem;
+	}
 </style>

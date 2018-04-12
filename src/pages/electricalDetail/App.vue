@@ -2,9 +2,11 @@
   <div class="electrity">
       <img src="../../assets/img/返回.png" class="fanhui">
 	  <div class="flower">
-		  <img src="../../assets/img/LOGO1.png" class="logo">
+		  <div class="logo">
+			  <a href="#"></a>
+		  </div>
 		  <div class="flowerRight">
-			  <h3>{{ title }}</h3>
+			  <h3>花花公子</h3>
 			  <p>运营方名称：捷富集团</p>
 			  <p>备案登记号：23432453546</p>
 		  </div>
@@ -16,76 +18,196 @@
 		  <a href="#">详情</a>
 	  </div>
 	  <div class="titleBar">门店可用虚拟卡</div>
-        <div class="possess">
-            <div class="possess-title">
-                <div class="float-left"><span><img src="../../assets/img/success@2x.png" alt="已拥有"></span>已拥有的卡片</div>
-                <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
+        <div v-if="open">
+            <div class="possess">
+                <div class="possess-title">
+                    <div class="float-left"><span><img src="../../assets/img/success@2x.png" alt="已拥有"></span>已拥有的卡片</div>
+                    <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
+                </div>
+                <div class="card" v-for="(item,index) in card1" :key="index" v-show="index < notCardLength">
+                    <dl>
+                        <dt><div class="cLogo" :style="{background:'url(http://211.138.112.132:2704/serverimages/' +item.card_market_type.clog+')'}"></div></dt>
+                        <dd>
+                            <h3 v-if="item.card_market_type.maintype==0">通用信用支付卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==1">信用支付专项卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==2">分期支付专项卡</h3>
+                            <p>{{item.card_market_type.aidname}}</p>
+                        </dd>
+                    </dl>
+                    <div class="credit"></div>
+                </div>
             </div>
-            <div class="card">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
-            </div>
-            <div class="card card2">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
+            <div class="possess">
+                <div class="possess-title">
+                    <div class="float-left"><span><img src="../../assets/img/kapian@2x.png" alt="未拥有"></span>未拥有的卡片</div>
+                    <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
+                </div>
+                <div class="card" v-for="(item,index) in card2" :key="index" v-show="index < notCardLength">
+                    <dl>
+                        <dt><div class="cLogo" :style="{background:'url(http://211.138.112.132:2704/serverimages/' +item.card_market_type.clog+')'}"></div></dt>
+                        <dd>
+                            <h3 v-if="item.card_market_type.maintype==0">通用信用支付卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==1">信用支付专项卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==2">分期支付专项卡</h3>
+                            <p>{{item.card_market_type.aidname}}</p>
+                        </dd>
+                    </dl>
+                    <div class="credit"></div>
+                </div>
             </div>
         </div>
-        <div class="possess">
-            <div class="possess-title">
-                <div class="float-left"><span><img src="../../assets/img/未拥有@2x.png" alt="未拥有"></span>未拥有的卡片</div>
-                <div class="float-right">查看更多<span><img src="../../assets/img/gengduo@2x.png" alt="查看更多"></span></div>
-            </div>
-            <div class="card">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
-            </div>
-            <div class="card card2">
-                <dl>
-                    <dt><div class="cLogo"></div></dt>
-                    <dd>
-                        <h3>团圆佳节卡</h3>
-                        <p>院子餐厅</p>
-                    </dd>
-                </dl>
-                <div class="credit"></div>
+        <div v-if="!open">
+            <div class="possess nouser">
+                <div class="card" v-for="(item,index) in card2" :key="index" v-show="index < cardLimitNumber">
+                    <dl>
+                        <dt><div class="cLogo" :style="{background:'url(http://211.138.112.132:2704/serverimages/' +item.card_market_type.clog+')'}"></div></dt>
+                        <dd>
+                            <h3 v-if="item.card_market_type.maintype==0">通用信用支付卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==1">信用支付专项卡</h3>
+                            <h3 v-if="item.card_market_type.maintype==2">分期支付专项卡</h3>
+                            <p>{{item.card_market_type.aidname}}</p>
+                        </dd>
+                    </dl>
+                    <div class="credit"></div>
+                </div>
+                <div class="button" @click="switchLoadECard">{{cardTab}}</div>
             </div>
         </div>
   </div>
 </template>
 
 <script>
-// export default {
-//   name:"electricalDatail",
-//   data(){
-//     return {
-//       title:"花花公子",
-//       ps:[
-//         "运营方名称：捷富集团",
-//         "备案登记号：23432453546",
-//         "捷富商城主要经营服饰、包袋、配饰、鞋靴、生活用品、轻奢品等等，欧蓝商城于2015年上线至今已有2000万...",
-//         "详情"
-//       ],
-//     }
-//   }
-// }
+	import 'mint-ui/lib/style.css'
+    import axios from 'axios';
+    import md5 from 'md5';
+    import url from "../../assets/js/public.js"; 
+export default {
+		name:"electricalDatail",
+		data(){
+            return {
+                open : true,
+                cardFlag : false,
+                notCardLength:'',
+                cardTab : "查看更多",
+                cardLength : '',
+                cardLimitNumber : 2,
+                imgList:[],
+                data:'',
+                card1:[],
+                card2:[]
+            }
+        },
+        methods: {
+            goback(){
+                window.history.go(-1)
+            },
+            urlParam(name) { 
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+                var r = window.location.search.substr(1).match(reg); 
+                var r = "?uid=14260720180209165930&aid=14260720180209165930&shopaid=14230920180209140323&tocken=20180202123045205-504da6af1e7a4f30885dbd8af627d5ac".substr(1).match(reg); 
+                if (r != null) return unescape(r[2]); 
+                return null; 
+            },
+            getData(loginaid,aid,tocken){
+                let obj = {
+                    aid,   //门店编号
+                    loginaid,
+                    tocken,
+                    apiId : "Api_MERCHANT_SHOP_A2_Request"
+                }
+                let newkey = Object.keys(obj).sort();
+                let str = "";
+                for (var i = 0; i < newkey.length; i++) {
+                    str += obj[newkey[i]];
+                }
+                obj.sign = md5(str);
+                let requestjson = JSON.stringify(obj);
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: url.url,
+                    headers:{
+                    'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    params:{
+                        requestjson
+                    }
+                })
+                .then(function (res) {
+                    _this.data = res.data.pageList[0];
+                    let obj = {};
+                    obj.src = 'http://211.138.112.132:2704/serverimages/'+res.data.pageList[0].shopphotos;
+                    _this.imgList.push(obj);
+                    console.log(_this.imgList)
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+            },
+            getCardMsg(shopaid,loginaid,isBind,tocken){
+                let obj = {
+                    loginaid,
+                    shopaid,
+                    isBind,
+                    tocken,
+                    apiId : "Api_CM_BIND_CARDTYPES_A5_qryShopBindCardsAndNotBindCards_Request",
+                    // apiId : 'Api_MERCHANT_SHOP_A5_qrCards_Matched_AllNotBindShop_Request'
+                }
+                let newkey = Object.keys(obj).sort();
+                let str = "";
+                for (var i = 0; i < newkey.length; i++) {
+                    str += obj[newkey[i]];
+                }
+                obj.sign = md5(str);
+                let requestjson = JSON.stringify(obj);
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: url.url,
+                    headers:{
+                    'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    params:{
+                        requestjson
+                    }
+                })
+                .then(function (res) {
+                    if(isBind==0){
+                        _this.card1 = res.data.pageList;
+                        console.log(_this.card1)
+                    }else{
+                        _this.card2 = res.data.pageList;   
+                        _this.notCardLength = _this.card2.length;
+                        console.log(_this.card2)
+                                             
+                    }
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+            },
+            switchLoadECard(){
+                this.cardLimitNumber == 2 ? this.cardLimitNumber = this.notCardLength : this.cardLimitNumber = 2;
+                this.cardFlag = !this.cardFlag;
+                this.cardFlag ? this.cardTab = "收起列表" : this.cardTab = "查看更多";
+            },
+
+        },
+        mounted(){
+            let aid = this.urlParam('aid');
+            let loginaid = this.urlParam('uid');
+            let shopaid = this.urlParam('shopaid');
+            let tocken = this.urlParam('tocken');
+            this.getData(loginaid,aid,tocken);
+            if(loginaid){
+                this.getCardMsg(loginaid,shopaid,'0');
+                this.getCardMsg(loginaid,shopaid,'1');
+            }else{
+                this.open = false;
+                this.getCardMsg(shopaid);                
+            }
+        }
+}
 </script>
 
 <style scoped>
@@ -97,7 +219,6 @@
 		width: 100%;
 		height: 4.39rem;
 		background:rgba(97,97,97,1);
-		/* padding-left: 0.3rem; */
 	}
 	img.fanhui{
 		width: 0.22rem;
@@ -114,6 +235,13 @@
 		height: 1.35rem;
 		width: 1.35rem;
 		margin-left: 0.3rem;
+	}
+	.flower .logo a{
+		display: inline;
+		display: block;
+		height: 1.35rem;
+		width: 1.35rem;
+		background: url(../../assets/img/LOGO1.png) no-repeat
 	}
 	.flower .flowerRight{
 		height: 1.35rem;
@@ -153,7 +281,7 @@
 		line-height:0.34rem;
 		display: inline;
 		display: block;
-		width: 6rem;
+		width: 6.2rem;
 		float: left;
 		margin-top: 0.31rem;
 	}
@@ -162,7 +290,7 @@
 		display: inline;
 		display: block;
 		text-align: center;
-		width: 0.82rem;
+		width: 0.68rem;
 		height: 0.4rem;
 		border: 0.01rem solid #fff;
 		border-radius: 0.1rem; 

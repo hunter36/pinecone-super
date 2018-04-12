@@ -2,7 +2,7 @@
   <div class="credit">
       <ul>
         <li>
-          <img src="../../assets/img/xiaofei@2x.png" class="left">
+          <a href="#" class="left l1"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">退款-阿玛尼星光大道店</span>
@@ -13,10 +13,10 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
         <li>
-          <img src="../../assets/img/xiaofei@2x.png" class="left">
+          <a href="#" class="left l1"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">退款-阿玛尼星光大道店</span>
@@ -27,10 +27,10 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
         <li>
-          <img src="../../assets/img/zhangdan@2x.png" class="left">
+          <a href="#" class="left l2"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">账单分期</span>
@@ -41,10 +41,10 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
         <li>
-          <img src="../../assets/img/huankuan@2x.png" class="left">
+          <a href="#" class="left l3"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">还款-自动扣款</span>
@@ -55,10 +55,10 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
         <li>
-          <img src="../../assets/img/huankuan@2x.png" class="left">
+          <a href="#" class="left l3"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">还款-主动还款</span>
@@ -69,10 +69,10 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
         <li>
-          <img src="../../assets/img/huiyuan@2x.png" class="left">
+          <a href="#" class="left l4"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">会员费</span>
@@ -83,10 +83,10 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
         <li>
-          <img src="../../assets/img/huiyuan@2x.png" class="left">
+          <a href="#" class="left l4"></a>
           <div class="refund">
             <p class="title">
               <span class="title-t">会员费-减免</span>
@@ -97,7 +97,7 @@
               <span>10-12 12:34</span>
             </p>
           </div>
-          <img src="../../assets/img/jinru.png" class="right">
+          <a href="#" class="right"></a>
         </li>
       </ul>
   </div>
@@ -128,17 +128,45 @@ li{
   padding-right: 0.3rem
 }
 li .left{
+  display: block;
   width: 0.84rem;
   height: 0.84rem;
   margin-top: 0.48rem;
   margin-right: 0.29rem;
   float: left;
 }
+.left:before{content: ""; display: block; padding-top: 100%;}
+.l1{
+		overflow: hidden;
+		background-image: url(../../assets/img/xiaofei@2x.png) ;
+		background-size:100% auto;
+		background-repeat: no-repeat;
+}
+.l2{
+		overflow: hidden;
+		background-image: url(../../assets/img/zhangdan@2x.png) ;
+		background-size:100% auto;
+		background-repeat: no-repeat;
+}
+.l3{
+		overflow: hidden;
+		background-image: url(../../assets/img/huankuan@2x.png) ;
+		background-size:100% auto;
+		background-repeat: no-repeat;
+}
+.l4{
+		overflow: hidden;
+		background-image: url(../../assets/img/huiyuan@2x.png) ;
+		background-size:100% auto;
+		background-repeat: no-repeat;
+}
 li .right{
   width: 0.15rem;
   height: 0.29rem;
   margin-top: 0.75rem;
   float: right;
+  display: block;
+  background: url(../../assets/img/jinru.png)
 }
 .refund{
   float: left;
