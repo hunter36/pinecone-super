@@ -2,10 +2,10 @@
   <div id="app">
     <div class="box">
     <div id="detail-top">
-        <div class="cardBox" :style="{backgroundImage: 'url(http://211.138.112.132:2704/serverimages/' + bgimg + ')'}">
+        <div class="cardBox" :style="{backgroundImage: 'url(' + bgimg + ')'}">
             <div class="logoBox">
                 <div class="img">
-                    <img src="../../assets/img/logo@2x.png" alt="加载中...">   
+                    <img :src="clog">   
                 </div>
                 <div class="logo-right">
                     <div>
@@ -38,9 +38,10 @@
             </div>
             <div>
                 <span>支付方式</span>
-                <span v-show="baseMsg.maintype==0">通用信用支付卡</span>
-                <span v-show="baseMsg.maintype==1">信用支付专项卡</span>
-                <span v-show="baseMsg.maintype==2">分期支付专项卡</span>
+                <span v-show="baseMsg.maintype==''"></span>
+                <span v-if="baseMsg.maintype==0">通用信用支付卡</span>
+                <span v-if="baseMsg.maintype==1">信用支付专项卡</span>
+                <span v-if="baseMsg.maintype==2">分期支付专项卡</span>
             </div>
             <div>
                 <span>申请条件</span>
@@ -53,7 +54,7 @@
             </div>
             <div>
                 <span>卡片应用场景</span>
-                <span>{{baseMsg.useCard}}</span>
+                <span>{{baseMsg.scene}}</span>
             </div>
             <section class="wrop">
                 <p>应用范围</p>
@@ -72,7 +73,6 @@
 <script>
 import axios from 'axios';
 import md5 from 'md5';
-import url from "../../assets/js/public.js";
   export default {
     data () {
       return {
@@ -80,55 +80,62 @@ import url from "../../assets/js/public.js";
         indate:1,
         indateVal1:"",
         indateVal2:"",
-        bgimg:""
+        bgimg:"",
+        clog:""
+      }
+    },
+    methods:{
+      getUrlParam(name) { 
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+        var r = window.location.search.substr(1).match(reg); 
+        if (r != null) return unescape(r[2]); 
+        return null; 
+      },
+      getData(cid,loginaid){
+        let obj = {
+          loginaid,
+          card_type_id : cid,
+          details:'1',
+          clog:"690x334",
+          style:"0",
+          apiId : "Api_CARD_MARKET_TYPE_A2_Request"
+        }
+        var newkey = Object.keys(obj).sort();
+        var str = "";
+        for (var i = 0; i < newkey.length; i++) {
+            str += obj[newkey[i]];
+        }
+        obj.sign = md5(str);
+        let requestjson = JSON.stringify(obj);
+        let _this = this;
+        axios({
+          method: 'post',
+          url: "/ldo",
+          headers:{
+            'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          params:{
+            requestjson
+          }
+        })
+        .then(function (res) {
+          _this.baseMsg = res.data.pageList[0];
+          _this.indate = res.data.pageList[0].card_type_contract.cpLoseType;
+          _this.indateVal1 = res.data.pageList[0].card_type_contract.cp11Losemaxuse;
+          _this.indateVal2 = res.data.pageList[0].card_type_contract.cp10Loseexplen;
+          _this.bgimg = 'http://211.138.112.132:2704/serverimages/'+res.data.pageList[0].facestyle;
+          _this.clog = 'http://211.138.112.132:2704/serverimages/'+res.data.pageList[0].clog;
+          // console.log(11,_this.bgimg)
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
       }
     },
     mounted(){
-      function getData(name) { 
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-        var r = "uid=14840220180408165327&cid=13440320180202134238_2_174_1518076842433".substr(1).match(reg); 
-        // var r = window.location.search.substr(1).match(reg); 
-        if (r != null) return unescape(r[2]); 
-        return null; 
-      } 
-      let obj = {
-        loginaid : getData("uid"),
-        apiId : "Api_CARD_MARKET_TYPE_A2_Request",
-        card_type_id : getData("cid"),
-        clog:"690x334"
-      }
-      function objKeySort(obj) {
-          var newkey = Object.keys(obj).sort();
-          var str = "";
-          for (var i = 0; i < newkey.length; i++) {
-              str += obj[newkey[i]];
-          }
-          return str;
-      }
-      obj.sign = md5(objKeySort(obj));
-      let requestjson = JSON.stringify(obj);
-      let _this = this;
-      axios({
-        method: 'post',
-        url: url.url,
-        headers:{
-          'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        params:{
-          requestjson
-        }
-      })
-      .then(function (res) {
-        _this.baseMsg = res.data.pageList[0];
-        _this.indate = res.data.pageList[0].card_type_contract.cpLoseType;
-        _this.indateVal1 = res.data.pageList[0].card_type_contract.cp11Losemaxuse;
-        _this.indateVal2 = res.data.pageList[0].card_type_contract.cp10Loseexplen;
-        _this.bgimg = res.data.pageList[0].clog;
-        console.log(11,_this.bgimg)
-      })
-      .catch(function (response) {
-        console.log(response);
-      });
+      let loginaid = this.getUrlParam("loginaid");
+      let cid = this.getUrlParam("cid");
+      this.getData(cid,loginaid)
     }
   }
 </script>
@@ -169,6 +176,7 @@ h1 {
 .logoBox img {
   width: .96rem;
   float: left;
+  border-radius: 48px;
   margin-right: .28rem;
 }
 .logo-right {
@@ -200,11 +208,11 @@ h1 {
 }
 .money {
   color: #fff;
-  font-size: .3rem;
+  font-size: .33rem;
   font-family: PingFang SC;
 }
 .dollar {
-  font-size: .3rem;
+  font-size: .04rem;
 }
 .line {
   width: 6.36rem;
